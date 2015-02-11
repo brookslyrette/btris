@@ -15,8 +15,8 @@ let StartingRow = 0
 let PreviewColumn = 12
 let PreviewRow = 1
 
-let PointsPerLine = 10
-let LevelThreshold = 1000
+let PointsPerLine = [40,100,300,1200]
+let LevelThresholdLines = 10
 
 protocol BtrisDelegate {
     
@@ -37,10 +37,12 @@ class Btris {
     
     var score:Int
     var level:Int
+    var lines:Int
     
     init() {
         score = 0
         level = 1
+        lines = 0
         nextShape = nil
         fallingShape = nil
         
@@ -195,9 +197,10 @@ class Btris {
             return ([],[])
         }
         
-        let pointsEarned = removedLines.count * PointsPerLine * level
+        lines += removedLines.count
+        let pointsEarned = PointsPerLine[removedLines.count - 1] * level
         score += pointsEarned
-        if score >= level * LevelThreshold {
+        if lines >= (level * LevelThresholdLines) {
             level += 1
             delegate?.gameDidLevelUp(self)
         }

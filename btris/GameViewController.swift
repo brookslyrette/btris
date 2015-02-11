@@ -15,9 +15,9 @@ class GameViewController: UIViewController, BtrisDelegate, UIGestureRecognizerDe
     var btris: Btris!
     var panPointReference:CGPoint?
     
-    
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak var linesLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +51,6 @@ class GameViewController: UIViewController, BtrisDelegate, UIGestureRecognizerDe
         if let fallingShape = newShapes.fallingShape {
             self.scene.addPreviewShapeToScene(newShapes.nextShape!) {}
             self.scene.movePreviewShape(fallingShape) {
-                // #2
                 self.view.userInteractionEnabled = true
                 self.scene.startTicking()
             }
@@ -61,6 +60,7 @@ class GameViewController: UIViewController, BtrisDelegate, UIGestureRecognizerDe
     func gameDidBegin(btris: Btris) {
         levelLabel.text = "\(btris.level)"
         scoreLabel.text = "\(btris.score)"
+        linesLabel.text = "\(btris.lines)"
         scene.tickLengthMillis = TickLengthLevelOne
         
         // The following is false when restarting a new game
@@ -106,6 +106,7 @@ class GameViewController: UIViewController, BtrisDelegate, UIGestureRecognizerDe
         let removedLines = btris.removeCompletedLines()
         if removedLines.linesRemoved.count > 0 {
             self.scoreLabel.text = "\(btris.score)"
+            self.linesLabel.text = "\(btris.lines)"
             scene.animateCollapsingLines(removedLines.linesRemoved, fallenBlocks:removedLines.fallenBlocks) {
                 self.gameShapeDidLand(btris)
             }
